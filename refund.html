@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Reembolsos — Te Lo Dije</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Spectral:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple-deep:#3A1140; --purple:#5C1B57; --gold-light:#E4C05C;
+    --paper:#F1E9D2; --paper-dark:#E4D8B4; --ink:#2A1830; --ink-soft:#5A4A5F; --cream:#FBF7EC;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--cream); color:var(--ink); font-family:'Spectral', serif; line-height:1.65;}
+  a:focus-visible, button:focus-visible{outline:3px solid #1C74B4; outline-offset:2px;}
+  header{background:var(--purple-deep); padding:20px 24px; border-bottom:4px solid var(--gold-light);}
+  header a{color:var(--cream); text-decoration:none; font-family:'Anton', sans-serif; font-size:1.1rem;}
+  main{max-width:760px; margin:0 auto; padding:40px 24px 80px;}
+  h1{font-family:'Anton', sans-serif; font-weight:400; color:var(--purple-deep); font-size:2rem; margin-bottom:6px;}
+  h2{font-family:'Anton', sans-serif; font-weight:400; color:var(--purple); font-size:1.2rem; margin-top:34px;}
+  .updated{color:var(--ink-soft); font-size:0.85rem; margin-bottom:30px;}
+  .disclaimer{
+    background:var(--paper); border:1px solid var(--paper-dark); border-radius:6px;
+    padding:16px 18px; font-size:0.9rem; color:var(--ink-soft); margin-bottom:30px;
+  }
+  table{width:100%; border-collapse:collapse; margin:16px 0;}
+  th, td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--paper-dark); font-size:0.92rem;}
+  th{color:var(--purple-deep); font-family:'Spectral', serif; font-weight:600;}
+  ul{padding-left:22px;}
+  li{margin-bottom:6px;}
+  a{color:var(--purple);}
+  footer{padding:24px; text-align:center; font-size:0.82rem; color:var(--ink-soft);}
+</style>
+</head>
+<body>
+<header><a href="index.html">← Te Lo Dije</a></header>
+<main>
+  <h1>Política de Reembolsos</h1>
+  <p class="updated">Última actualización: [fecha]</p>
+
+  <div class="disclaimer">
+    Plantilla general, no asesoría legal — revísala con un abogado, y ajusta los plazos según
+    lo que confirmes con tu proveedor de impresión y envío (Lob), ya que sus propios tiempos de
+    producción determinan hasta cuándo es viable cancelar.
+  </div>
+
+  <p>Como cada carta se personaliza e imprime específicamente para tu pedido, y se envía por
+  correo físico, las cancelaciones y reembolsos tienen ventanas de tiempo limitadas:</p>
+
+  <table>
+    <tr><th>Momento</th><th>¿Se puede reembolsar?</th></tr>
+    <tr><td>Antes de que el pedido pase a producción</td><td>Sí, reembolso completo</td></tr>
+    <tr><td>Ya en impresión o enviada por correo</td><td>No — la carta ya se produjo y/o está en camino</td></tr>
+    <tr><td>Pago rechazado o duplicado por error técnico</td><td>Sí, se corrige o reembolsa</td></tr>
+  </table>
+
+  <h2>1. Cómo pedir un reembolso o cancelación</h2>
+  <p>Escríbenos lo antes posible a
+  <a href="mailto:hola@telodije.com?subject=Solicitud%20de%20reembolso">hola@telodije.com</a>
+  con tu número de pedido. Como el envío a producción es automático apenas se confirma el pago,
+  entre más rápido nos escribas, más probable es que alcancemos a cancelarlo a tiempo.</p>
+
+  <h2>2. Errores en la dirección</h2>
+  <p>Si la carta no llega porque la dirección proporcionada era incorrecta o incompleta, no
+  podemos reembolsar el costo de impresión y envío ya realizado — pero con gusto reimprimimos
+  y reenviamos la carta a la dirección correcta por un cargo reducido que cubre únicamente el
+  franqueo adicional.</p>
+
+  <h2>3. Problemas con el proveedor de envío</h2>
+  <p>Si Lob (nuestro proveedor de impresión y correo) reporta un fallo de su lado y la carta
+  nunca llega a producirse, te reembolsamos completo o la reenviamos sin costo adicional, a tu
+  elección.</p>
+
+  <h2>4. Tiempo de procesamiento del reembolso</h2>
+  <p>Los reembolsos aprobados se procesan a través de Stripe y pueden tardar entre 5 y 10 días
+  hábiles en reflejarse, dependiendo de tu banco.</p>
+
+  <h2>5. Contacto</h2>
+  <p>[Nombre legal del negocio] · [dirección postal] ·
+     <a href="mailto:hola@telodije.com">hola@telodije.com</a></p>
+</main>
+<footer>&copy; <span id="y"></span> Te Lo Dije</footer>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
