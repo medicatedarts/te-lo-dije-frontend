@@ -27,13 +27,38 @@
     background:#E4D8B4; font-size:0.9rem;
   }
   a{color:#5C1B57;}
+  .actions{margin-top:24px;}
+  .btn{
+    display:inline-block;
+    background:#3A1140;
+    color:#FBF7EC;
+    font-family:'Anton', sans-serif;
+    letter-spacing:0.02em;
+    font-size:0.95rem;
+    padding:12px 22px;
+    border-radius:3px;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+  }
+  .auto-redirect{
+    margin-top:14px;
+    font-size:0.8rem;
+    color:#8A7A8F;
+  }
+  .auto-redirect.hidden{display:none;}
 </style>
 </head>
 <body>
   <div class="card">
     <h1>¡Pago recibido!</h1>
     <p>Tu carta está en proceso. En cuanto se confirme, se manda a imprimir y enviar por correo automáticamente — no tienes que hacer nada más.</p>
-    <div class="status" id="status">Consultando el estado de tu pedido…</div>
+    <div class="status" id="status" aria-live="polite">Consultando el estado de tu pedido…</div>
+
+    <div class="actions">
+      <a class="btn" href="index.html">Enviar otra carta</a>
+    </div>
+    <p class="auto-redirect hidden" id="auto-redirect" aria-live="polite"></p>
   </div>
 
   <script>
@@ -41,6 +66,7 @@
     const params = new URLSearchParams(window.location.search);
     const orderId = params.get('order');
     const statusEl = document.getElementById('status');
+    const autoRedirectEl = document.getElementById('auto-redirect');
 
     const labels = {
       pending: 'Esperando confirmación del pago…',
@@ -49,6 +75,25 @@
       error: '⚠️ Hubo un problema al enviarla. Nos encargamos de revisarlo.',
     };
 
+    // Estados finales: cuando llegamos aquí dejamos de consultar y
+    // arrancamos la cuenta regresiva para regresar al formulario.
+    const TERMINAL_STATES = ['sent', 'error'];
+
+    function startAutoRedirect(seconds = 10){
+      autoRedirectEl.classList.remove('hidden');
+      let remaining = seconds;
+      autoRedirectEl.textContent = `Volviendo al inicio en ${remaining}s…`;
+      const interval = setInterval(() => {
+        remaining -= 1;
+        if(remaining <= 0){
+          clearInterval(interval);
+          window.location.href = 'index.html';
+          return;
+        }
+        autoRedirectEl.textContent = `Volviendo al inicio en ${remaining}s…`;
+      }, 1000);
+    }
+
     async function checkStatus(){
       if(!orderId){ statusEl.textContent = 'No se encontró el número de pedido.'; return; }
       try {
@@ -56,7 +101,9 @@
         const data = await res.json();
         if(!res.ok){ statusEl.textContent = 'No se encontró tu pedido.'; return; }
         statusEl.textContent = `${labels[data.status] || data.status} (Exp. ${data.expNumber})`;
-        if(data.status === 'pending' || data.status === 'paid'){
+        if(TERMINAL_STATES.includes(data.status)){
+          startAutoRedirect(10);
+        } else {
           setTimeout(checkStatus, 3000); // sigue consultando hasta que quede "sent" o "error"
         }
       } catch (err) {
