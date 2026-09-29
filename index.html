@@ -680,6 +680,10 @@
         <input type="checkbox" id="consent-terms">
         <span>Acepto los <a href="terms.html" target="_blank" rel="noopener">Términos de Servicio</a>, la <a href="privacy.html" target="_blank" rel="noopener">Política de Privacidad</a> y la <a href="refund.html" target="_blank" rel="noopener">Política de Reembolsos</a>.</span>
       </label>
+      <label class="consent-line">
+        <input type="checkbox" id="consent-content-policy">
+        <span>Confirmo que el contenido de esta carta no incluye amenazas, contenido sexual explícito, contenido sobre menores, ni discurso de odio.</span>
+      </label>
     </div>
 
     <div class="price-card" id="precio">
@@ -943,6 +947,7 @@
       consent: {
         ageAndAuthorized: $('#consent-authorized').checked,
         acceptedTerms: $('#consent-terms').checked,
+        contentPolicy: $('#consent-content-policy').checked,
       },
     };
   }
@@ -959,6 +964,9 @@
     }
     if(!data.consent.acceptedTerms){
       return 'Falta aceptar los Términos de Servicio y la Política de Privacidad.';
+    }
+    if(!data.consent.contentPolicy){
+      return 'Falta confirmar que el contenido no incluye amenazas, contenido sexual, contenido sobre menores, ni discurso de odio.';
     }
     return null;
   }
@@ -991,7 +999,15 @@
       const result = await res.json();
 
       if(!res.ok){
-        throw new Error(result.error || 'No se pudo iniciar el pago.');
+        clearTimeout(wakeUpTimer);
+        payBtn.textContent = originalText;
+        payBtn.disabled = false;
+        if(result.code === 'content_policy'){
+          showModal('Contenido no permitido', result.error || 'El contenido de tu carta no está permitido.');
+        } else {
+          showModal('No se pudo continuar', result.error || 'No se pudo iniciar el pago. Intenta de nuevo en un momento.');
+        }
+        return;
       }
 
       clearTimeout(wakeUpTimer);
