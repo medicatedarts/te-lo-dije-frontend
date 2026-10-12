@@ -597,7 +597,7 @@
         <h3>El tema</h3>
       </div>
       <label for="tema">¿Sobre qué le advertiste?</label>
-      <input type="text" id="tema" placeholder="ej. invertir sus ahorros con ese \"pana\"">
+      <input type="text" id="tema" maxlength="70" placeholder="ej. invertir sus ahorros con ese \"pana\"">
     </div>
 
     <div class="field-section">
@@ -607,11 +607,11 @@
       </div>
       <div id="consequence-list">
         <div class="consequence-row">
-          <input type="text" class="consequence-input" placeholder="ej. iba a perder el dinero completo">
+          <input type="text" class="consequence-input" maxlength="80" placeholder="ej. iba a perder el dinero completo">
           <button class="remove-row" aria-label="Eliminar esta consecuencia" title="Eliminar">×</button>
         </div>
         <div class="consequence-row">
-          <input type="text" class="consequence-input" placeholder="ej. no iba a poder reclamarle a nadie">
+          <input type="text" class="consequence-input" maxlength="80" placeholder="ej. no iba a poder reclamarle a nadie">
           <button class="remove-row" aria-label="Eliminar esta consecuencia" title="Eliminar">×</button>
         </div>
       </div>
@@ -624,7 +624,7 @@
         <h3>A quién se le envía</h3>
       </div>
       <label for="nombre">Nombre completo del destinatario</label>
-      <input type="text" id="nombre" placeholder="ej. Wanda M. Rivera">
+      <input type="text" id="nombre" maxlength="50" placeholder="ej. Wanda M. Rivera">
 
       <label for="linea1">Dirección</label>
       <input type="text" id="linea1" placeholder="Calle, número, urbanización">
@@ -653,7 +653,7 @@
         <h3>De parte de</h3>
       </div>
       <label for="remitente">Tu nombre (o como quieras firmar)</label>
-      <input type="text" id="remitente" placeholder="ej. La persona que tenía razón">
+      <input type="text" id="remitente" maxlength="32" placeholder="ej. La persona que tenía razón">
     </div>
 
     <div class="field-section">
@@ -751,7 +751,7 @@
 
     <div class="footer-business">
       <!-- TODO: reemplaza estos datos por los reales de tu negocio antes de lanzar -->
-      <p>Angel G. Rivera Lacomba (operando como "Yo Te Lo Dije") · Urb. Victor Rojas 1, 500 calle Adjunta, Arecibo, PR 00612 · <a href="mailto:mail@yotelodije.com">mail@yotelodije.com</a></p>
+      <p>Angel G. Rivera Lacomba (operando como "Yo Te Lo Dije") · Urb. Victor Rojas 1, 500 calle Adjuntas, Arecibo, PR 00612 · <a href="mailto:mail@yotelodije.com">mail@yotelodije.com</a></p>
       <p>&copy; <span id="footer-year"></span> Yo Te Lo Dije. Todos los derechos reservados.</p>
     </div>
   </div>
@@ -886,24 +886,37 @@
   });
   updateToneSelectedClass();
 
+  // Máximo de consecuencias por carta: con más, la carta se pasa de una hoja al imprimirse.
+  const MAX_CONSEQUENCES = 5;
+  function updateAddButton(){
+    const full = $$('.consequence-row').length >= MAX_CONSEQUENCES;
+    const btn = $('#add-consequence');
+    btn.disabled = full;
+    btn.style.opacity = full ? '0.5' : '';
+    btn.textContent = full ? 'Máximo de 5 consecuencias' : '+ Añadir otra consecuencia';
+  }
+
   function wireConsequenceRow(row){
     row.querySelector('.consequence-input').addEventListener('input', updatePreview);
     row.querySelector('.remove-row').addEventListener('click', () => {
       if($$('.consequence-row').length > 1){
         row.remove();
         updatePreview();
+        updateAddButton();
       }
     });
   }
   $$('.consequence-row').forEach(wireConsequenceRow);
 
   $('#add-consequence').addEventListener('click', () => {
+    if($$('.consequence-row').length >= MAX_CONSEQUENCES) return;
     const row = document.createElement('div');
     row.className = 'consequence-row';
-    row.innerHTML = `<input type="text" class="consequence-input" placeholder="ej. otra consecuencia que se cumplió">
+    row.innerHTML = `<input type="text" class="consequence-input" maxlength="80" placeholder="ej. otra consecuencia que se cumplió">
                       <button class="remove-row" aria-label="Eliminar esta consecuencia" title="Eliminar">×</button>`;
     consequenceList.appendChild(row);
     wireConsequenceRow(row);
+    updateAddButton();
   });
 
   // meta date + exp number
